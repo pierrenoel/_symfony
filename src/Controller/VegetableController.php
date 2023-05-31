@@ -3,9 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Vegetable;
+use App\Form\VegetableType;
 use App\Repository\VegetableRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class VegetableController extends AbstractController
@@ -20,20 +22,23 @@ class VegetableController extends AbstractController
     }
 
     #[Route('vegetable/add',name:'vegetable_add')]
-    public function add(VegetableRepository $vegetableRepository) : Response
+    public function add(Request $request, VegetableRepository $vegetableRepository) : Response
     {
-        // Add a new vegatable into the database
+        $vegatable = new Vegetable();
 
-        $vegateble = new Vegetable();
+        $form = $this->createForm(VegetableType::class,$vegatable);
 
-        $vegateble->setName('Radis');
-        $vegateble->setDescription('Le radis cultivé, Raphanus sativus (du latin radix, radicis, « racine, raifort », du grec ῥαπυς, ῥαπυος, « rave, navet ») est une plante potagère annuelle ou bisannuelle de la famille des Brassicacées, principalement cultivée pour son hypocotyle charnu, souvent consommé cru, comme légume.
-        Toutes les parties de la plante sont comestibles, bien que sa racine pivot soit plus populaire. La peau et la chair du radis peuvent être de différentes couleurs, dont la plus courante est le rouge. Certaines variétés peuvent être bicolores, roses, violettes, vertes, blanches ou noires.');
-        $vegateble->setFamily('Raphanus sativus');
-        $vegateble->setImage('https://www.rustica.fr/images/okradis1-l870-h630.jpg');
+        $form->handleRequest($request);
 
-        $vegetableRepository->save($vegateble,true);
+        if($form->isValid() && $form->isSubmitted())
+        {
+            $vegetableRepository->save($vegatable,true);
 
-        return $this->redirectToRoute('vegetable_index');
+            return $this->redirectToRoute('vegetable_index');
+        }
+
+        return $this->render('vegetable/add.html.twig',[
+            'form' => $form
+        ]);
     }
 }

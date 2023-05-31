@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un légume | {{ parent() }}{% endblock %}
+
+{% block body %}
+
+
+<div class="container mx-auto my-5">
+   {{form_start(form,{
+    'action': path('vegetable_add'),
+    'method': 'POST',
+   })}}
+
+    <div class="w-full">
+        <input 
+            type="text"
+            name="{{ field_name(form.name)}}" 
+            placeholder="Nom du légume"
+            value="{{field_value(form.name)}}"
+            class="bg-gray-50 p-4 outline-none border w-full">
+    </div>
+
+   <div class="my-5 w-full">
+        <textarea
+            name="{{field_name(form.Description)}}"
+            placeholder="Description du légume"
+            class="bg-gray-50 p-4 outline-none border w-full"></textarea>
+   </div>
+
+   <div class="w-full">
+          <input 
+            type="text"
+            name="{{ field_name(form.Family)}}" 
+            placeholder="Famille du légume"
+            value="{{field_value(form.Family)}}"
+            class="bg-gray-50 p-4 outline-none border w-full">
+   </div>
+
+     <div class="w-full my-5">
+          <input 
+            type="text"
+            name="{{ field_name(form.image)}}" 
+            placeholder="Url image du légume"
+            value="{{field_value(form.image)}}"
+            class="bg-gray-50 p-4 outline-none border w-full">
+   </div>
+
+   <div>
+        <input type="submit" class="p-4 bg-violet-500 text-white rounded">
+   </div>
+
+
+   {{form_end(form)}}
+</div>
+
+{% endblock %}
